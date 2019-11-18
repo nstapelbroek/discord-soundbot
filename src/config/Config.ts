@@ -1,11 +1,12 @@
 import fs from 'fs';
 import path from 'path';
+import lodash from 'lodash';
 
 import ConfigInterface from './ConfigInterface';
-import EXAMPLE_CONFIG from './ExampleConfig';
+import DEFAULT_CONFIG from './DefaultConfig';
 
 export default class Config implements ConfigInterface {
-  public clientID!: string;
+  public clientId!: string;
   public token!: string;
   public language!: string;
   public prefix!: string;
@@ -30,7 +31,7 @@ export default class Config implements ConfigInterface {
     'game'
   ];
 
-  private readonly JSON_KEYS = ['clientID', 'token', ...this.MODIFIABLE_FIELDS];
+  private readonly JSON_KEYS = ['clientId', 'token', ...this.MODIFIABLE_FIELDS];
 
   [index: string]: any;
 
@@ -43,8 +44,6 @@ export default class Config implements ConfigInterface {
   }
 
   public set(field: string, value: string[]) {
-    if (!this.has(field)) return;
-
     switch (typeof this[field]) {
       case 'string':
         // eslint-disable-next-line prefer-destructuring
@@ -73,17 +72,16 @@ export default class Config implements ConfigInterface {
   }
 
   private initialize() {
-    if (!fs.existsSync(this.CONFIG_PATH)) {
-      this.initializeWithExampleConfig();
-      return;
+    this.initializeDefaultConfig();
+    if (fs.existsSync(this.CONFIG_PATH)) {
+      this.initializeWithSavedConfig();
     }
 
-    this.initializeWithSavedConfig();
+    this.initializeFromEnvironmentVariables();
   }
 
-  private initializeWithExampleConfig() {
-    this.ensureConfigDirectoryExists();
-    this.setFrom(EXAMPLE_CONFIG);
+  private initializeDefaultConfig() {
+    this.setFrom(DEFAULT_CONFIG);
   }
 
   private initializeWithSavedConfig() {
@@ -92,9 +90,14 @@ export default class Config implements ConfigInterface {
     this.setFrom(savedConfig);
   }
 
-  private ensureConfigDirectoryExists() {
-    if (!fs.existsSync(path.dirname(this.CONFIG_PATH))) {
-      fs.mkdirSync(path.dirname(this.CONFIG_PATH));
+  private initializeFromEnvironmentVariables() {
+    for (let envKey in process.env) {
+      const configKey = lodash.camelCase(envKey);
+      if(!this.JSON_KEYS.includes(configKey)) {
+        continue;
+      }
+
+      this.set(configKey, [process.env[envKey]!]);
     }
   }
 
