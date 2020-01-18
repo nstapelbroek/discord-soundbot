@@ -6,7 +6,7 @@ const DEFAULT_CONFIG: ConfigInterface = {
 
   language: 'en',
   prefix: '!',
-  acceptedExtensions: ['.mp3', '.wav'],
+  acceptedExtensions: ['.wav', '.mp3', '.aac', '.flac', '.m4a', '.webm', '.ogg'],
   maximumFileSize: 1000000,
   volume: 1.0,
   deleteMessages: false,
