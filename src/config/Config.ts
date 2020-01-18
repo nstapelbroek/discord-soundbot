@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import lodash from 'lodash';
 
 import ConfigInterface from './ConfigInterface';
 import DEFAULT_CONFIG from './DefaultConfig';
+import camelCase from 'lodash/camelCase';
 
 export default class Config implements ConfigInterface {
   public clientId!: string;
@@ -92,7 +92,7 @@ export default class Config implements ConfigInterface {
 
   private initializeFromEnvironmentVariables() {
     for (let envKey in process.env) {
-      const configKey = lodash.camelCase(envKey);
+      const configKey = camelCase(envKey);
       if (!this.JSON_KEYS.includes(configKey)) {
         continue;
       }
