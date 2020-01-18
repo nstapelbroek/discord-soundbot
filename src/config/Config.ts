@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import camelCase from 'lodash/camelCase';
 
 import ConfigInterface from './ConfigInterface';
 import DEFAULT_CONFIG from './DefaultConfig';
-import camelCase from 'lodash/camelCase';
 
 export default class Config implements ConfigInterface {
   public clientId!: string;
@@ -91,19 +91,19 @@ export default class Config implements ConfigInterface {
   }
 
   private initializeFromEnvironmentVariables() {
-    for (let envKey in process.env) {
+    Object.keys(process.env).forEach(envKey => {
       const configKey = camelCase(envKey);
       if (!this.JSON_KEYS.includes(configKey)) {
-        continue;
+        return;
       }
 
       let envValue = [process.env[envKey]!];
-      if (configKey == 'acceptedExtensions') {
+      if (configKey === 'acceptedExtensions') {
         envValue = envValue[0].split(',');
       }
 
       this.set(configKey, envValue);
-    }
+    });
   }
 
   private writeToConfig() {
