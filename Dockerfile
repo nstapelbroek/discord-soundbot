@@ -2,7 +2,11 @@
 FROM node:12-slim as base
 LABEL maintainer="Marko Kajzer <markokajzer91@gmail.com>"
 
-RUN wget -O /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-$(dpkg --print-architecture)
+RUN apt-get update -q && apt-get install -qy wget tar
+RUN wget -qO /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-$(dpkg --print-architecture)
+RUN wget -qO /tmp/ffmpeg.tar.gz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-$(dpkg --print-architecture)-static.tar.xz && \
+    tar -x -C /usr/local/bin --strip-components 1 -f /tmp/ffmpeg.tar.gz --wildcards '*/ffmpeg' && rm /tmp/ffmpeg.tar.gz
+
 RUN chmod +x /tini && mkdir /app && chown -R node:node /app
 WORKDIR /app
 

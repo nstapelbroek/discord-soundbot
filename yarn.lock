@@ -1608,11 +1608,6 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
-ffmpeg-static@^2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/ffmpeg-static/-/ffmpeg-static-2.7.0.tgz#e1b050f7c0457595fceccec7d8bb04cdb8f223dc"
-  integrity sha512-Khjg/4tCBen58ixhXlkRNqs3hUKpTOlGOUrw859M09tdjeMkXyXRQ+YuJjGczRhGO7Y8fHPJZcQ37V/OzvZvjQ==
-
 figures@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-3.1.0.tgz#4b198dd07d8d71530642864af2d45dd9e459c4ec"
