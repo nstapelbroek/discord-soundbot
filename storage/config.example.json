@@ -10,5 +10,5 @@
   "deleteMessages": false,
   "stayInChannel": false,
   "deafen": false,
-  "game": ""
+  "game": "sounds"
 }

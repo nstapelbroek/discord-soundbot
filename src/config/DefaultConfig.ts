@@ -12,7 +12,7 @@ const DEFAULT_CONFIG: ConfigInterface = {
   deleteMessages: false,
   stayInChannel: false,
   deafen: false,
-  game: ''
+  game: 'sounds'
 };
 
 export default DEFAULT_CONFIG;
