@@ -23,6 +23,7 @@
   "author": "Marko Kajzer",
   "license": "MIT",
   "dependencies": {
+    "@sentry/node": "^5.11.1",
     "awilix": "^4.2.2",
     "discord.js": "discordjs/discord.js#master",
     "i18n": "^0.8.4",

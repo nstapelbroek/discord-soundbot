@@ -22,7 +22,8 @@ RUN yarn build
 
 # release has the bare minimum to run the application
 FROM base as release
-ENV NODE_ENV=production
+ENV NODE_ENV=production \
+    SENTRY_DSN=https://c4c3dce19407466db31cfb5c9be7d3f4@sentry.io/1887279
 COPY --chown=node:node --from=build ./app/dist ./dist
 COPY --chown=node:node --from=build ./app/locale ./locale
 COPY --chown=node:node --from=build ./app/storage ./storage
