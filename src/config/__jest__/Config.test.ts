@@ -22,8 +22,16 @@ describe('Default config', () => {
     expect(testedConfig.prefix).toEqual('!');
   });
 
-  test('Default whitelisted extensions are mp3 and wav files', () => {
-    expect(testedConfig.acceptedExtensions).toEqual(['.mp3', '.wav']);
+  test('Default whitelisted extensions are popular audio files', () => {
+    expect(testedConfig.acceptedExtensions).toEqual([
+      '.wav',
+      '.mp3',
+      '.aac',
+      '.flac',
+      '.m4a',
+      '.webm',
+      '.ogg'
+    ]);
   });
 
   test('Default maximum filesize is ', () => {
@@ -42,8 +50,8 @@ describe('Default config', () => {
     expect(testedConfig.deafen).toEqual(false);
   });
 
-  test('Default game is not set', () => {
-    expect(testedConfig.game).toEqual('');
+  test('Default game is set to sounds', () => {
+    expect(testedConfig.game).toEqual('sounds');
   });
 });
 
