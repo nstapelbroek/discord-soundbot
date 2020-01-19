@@ -1,8 +1,6 @@
 name: build docker images
 
 on:
-  pull_request:
-    branches: latest
   push:
     branches: latest
 
@@ -20,11 +18,14 @@ jobs:
         with:
           version: latest
       -
-        name: Available platforms
-        run: echo ${{ steps.buildx.outputs.platforms }}
-      -
-        name: Run Buildx
+        name: Build images
+        env:
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
         run: |
+          printenv DOCKERHUB_PASSWORD | docker login --username nstapelbroekbot --password-stdin
           docker buildx build \
             --platform linux/amd64,linux/arm64,linux/arm/v7 \
-            --output "type=image,push=false" .
+            --tag nstapelbroek/discord-soundbot:latest \
+            --pull \
+            --push \
+            .
