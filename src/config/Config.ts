@@ -2,7 +2,7 @@ import { storagePath } from '@util/FileLocations';
 import fs from 'fs';
 import camelCase from 'lodash/camelCase';
 
-import ConfigInterface from './ConfigInterface';
+import ConfigInterface, { ConfigValue } from './ConfigInterface';
 import DEFAULT_CONFIG from './DefaultConfig';
 
 export default class Config implements ConfigInterface {
@@ -15,6 +15,7 @@ export default class Config implements ConfigInterface {
   public volume!: number;
   public deleteMessages!: boolean;
   public stayInChannel!: boolean;
+  public timeout!: number;
   public deafen!: boolean;
   public game!: string;
 
@@ -27,6 +28,7 @@ export default class Config implements ConfigInterface {
     'volume',
     'deleteMessages',
     'stayInChannel',
+    'timeout',
     'deafen',
     'game'
   ];
@@ -43,26 +45,31 @@ export default class Config implements ConfigInterface {
     return this.MODIFIABLE_FIELDS.includes(field);
   }
 
-  public set(field: string, value: string[]) {
+  public set(field: string, value: string[]): ConfigValue | undefined {
+    if (!this.JSON_KEYS.includes(field)) return undefined;
+
+    let newValue: ConfigValue;
+
     switch (typeof this[field]) {
       case 'string':
-        // eslint-disable-next-line prefer-destructuring
-        this[field] = value[0];
+        newValue = field === 'game' ? value.join(' ') : value[0];
         break;
       case 'number':
-        this[field] = parseFloat(value[0]);
+        newValue = parseFloat(value[0]);
         break;
       case 'boolean':
-        this[field] = value[0].toLowerCase() === 'true';
+        newValue = value[0].toLowerCase() === 'true';
         break;
       case 'object':
-        this[field] = value;
-        break;
       default:
+        newValue = value;
         break;
     }
 
+    this[field] = newValue;
     this.writeToConfig();
+
+    return newValue;
   }
 
   public setFrom(data: ConfigInterface) {
@@ -91,19 +98,16 @@ export default class Config implements ConfigInterface {
   }
 
   private initializeFromEnvironmentVariables() {
-    Object.keys(process.env).forEach(envKey => {
-      const configKey = camelCase(envKey);
-      if (!this.JSON_KEYS.includes(configKey)) {
-        return;
-      }
+    Object.keys(process.env)
+      .filter(envKey => this.JSON_KEYS.includes(camelCase(envKey)))
+      .forEach(envKey => {
+        let envValue = [process.env[envKey]!];
+        if (envKey === 'ACCEPTED_EXTENSIONS') {
+          envValue = envValue[0].split(',');
+        }
 
-      let envValue = [process.env[envKey]!];
-      if (configKey === 'acceptedExtensions') {
-        envValue = envValue[0].split(',');
-      }
-
-      this.set(configKey, envValue);
-    });
+        this.set(camelCase(envKey), envValue);
+      });
   }
 
   private writeToConfig() {

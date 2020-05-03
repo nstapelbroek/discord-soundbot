@@ -6,7 +6,9 @@
     "target": "es6",
     "strict": true,
     "outDir": "dist",
+    "sourceMap": true,
     "lib": [
+      "es2015",
       "es2017"
     ],
 
@@ -15,16 +17,16 @@
       "@config/*": ["src/config/*"],
       "@queue/*": ["src/queue/*"],
       "@util/*": ["src/util/*"]
-    }
+    },
+    "incremental": true
   },
   "include": [
     "src/**/*",
-    "bin/**/*",
-    "lib/**/*"
+    "bin/**/*"
   ],
 
   "exclude": [
-    "src/**/__jest__/**/*.ts",
-    "src/**/__mocks__/**/*.ts"
+    "**/__jest__",
+    "**/__mocks__"
   ]
 }

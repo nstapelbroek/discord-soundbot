@@ -16,6 +16,11 @@ Dockerfile
 docker-compose.yml
 jest.config.js
 
-tslint.yml
+.eslintignore
+.eslintrc.yml
+docker-compose.yml
+Dockerfile
+jest.config.js
+
 CHANGELOG.md
 README.md

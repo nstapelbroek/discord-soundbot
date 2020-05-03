@@ -7,7 +7,7 @@ import UserCommand from './base/UserCommand';
 export default class AvatarCommand implements UserCommand {
   public readonly TRIGGERS = ['avatar'];
   public readonly NUMBER_OF_PARAMETERS = 1;
-  public readonly USAGE = 'Usage: !avatar [remove|get|set]';
+  public readonly USAGE = 'Usage: !avatar [remove]';
 
   private readonly config: Config;
   private user!: ClientUser;
@@ -34,8 +34,7 @@ export default class AvatarCommand implements UserCommand {
       return;
     }
 
-    const attachment = message.attachments.first();
-    if (message.attachments.size !== 1 || !attachment) {
+    if (message.attachments.size !== 1) {
       message.channel.send(this.USAGE);
       return;
     }
@@ -46,13 +45,17 @@ export default class AvatarCommand implements UserCommand {
   }
 
   private listAvatar(message: Message) {
-    if (this.user.avatarURL === null) {
+    if (!this.user.avatarURL()) {
       message.channel.send(
         localize.t('commands.avatar.errors.noAvatar', { prefix: this.config.prefix })
       );
       return;
     }
 
-    message.channel.send(localize.t('commands.avatar.url', { url: this.user.defaultAvatarURL }));
+    message.channel.send(
+      localize.t('commands.avatar.url', {
+        url: this.user.displayAvatarURL({ dynamic: true, format: 'png', size: 256 })
+      })
+    );
   }
 }

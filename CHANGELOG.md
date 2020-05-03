@@ -1,3 +1,34 @@
+## Unreleased
+
+**Features**
+
++ Add possibility to set custom `timeout` when using `stayInChannel` via config option
+
+**Bugfixes**
+
++ Fix !avatar not sending the correct URL
+
+## 2.0.0 (2020-03-06)
+
+**Features**
+
++ Set config variables from environment
++ Upgrade to Discord.js v12
+  + Resolves long standing issue of sounds being cut off at the end when using Node.js versions > 8
+  + Resolves issues for very short sounds
+
+**Bugfixes**
+
++ Fix `!ignore` command
+
+**Under the hood**
+
++ Update dependencies
++ Enable incremental builds
++ Remove `awilix` dependency
++ Added basic CI via GitHub Actions
++ Added VSCode settings and recommended extensions for contributors
+
 ## 1.6.0 (2019-10-27)
 
 **Features**

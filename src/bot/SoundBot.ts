@@ -104,7 +104,7 @@ export default class SoundBot extends Client {
   private findFirstWritableChannel(guild: Guild) {
     if (!guild.me) return undefined;
 
-    const channels = guild.channels
+    const channels = guild.channels.cache
       .filter(channel => channel.type === 'text')
       .filter(channel => {
         const permissions = channel.permissionsFor(guild.me!);

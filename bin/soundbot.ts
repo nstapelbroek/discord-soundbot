@@ -3,25 +3,22 @@
 import * as Sentry from '@sentry/node';
 
 import localize from '@util/i18n/localize';
-import container from '../src/util/Container';
-import SoundBot from '../src/bot/SoundBot';
-import Config from '../src/config/Config';
-import SystemConfig from '../src/config/SystemConfig';
+import Container from '@util/Container';
+import EnvironmentConfig from '@config/EnvironmentConfig';
 
-const config = container.cradle.config as Config;
-const systemConfig = new SystemConfig();
+const { config, soundBot: bot } = Container;
+const environment = new EnvironmentConfig();
 
 localize.setLocale(config.language);
 
-if (systemConfig.sentryDsn) {
+if (environment.sentryDsn) {
   Sentry.init({
-    dsn: systemConfig.sentryDsn,
-    environment: systemConfig.environment,
-    serverName: systemConfig.hostName
+    dsn: environment.sentryDsn,
+    environment: environment.environment,
+    serverName: environment.hostName
   });
 }
 
-const bot = container.cradle.soundBot as SoundBot;
 bot.start();
 
 console.info(localize.t('url', { clientId: config.clientId }));

@@ -1,10 +1,7 @@
 import Config from '../Config';
 
 jest.mock('fs');
-const randomString = (length: number) =>
-  Math.random()
-    .toString(36)
-    .substring(length);
+const randomString = (length: number) => Math.random().toString(36).substring(0, length);
 
 describe('Default config', () => {
   const testedConfig = new Config();
@@ -34,34 +31,29 @@ describe('Default config', () => {
     ]);
   });
 
-  test('Default maximum filesize is ', () => {
+  test('Default maximum filesize is 1MB', () => {
     expect(testedConfig.maximumFileSize).toEqual(1000000);
   });
 
   test('Default setting to delete messages is false', () => {
-    expect(testedConfig.deleteMessages).toEqual(false);
+    expect(testedConfig.deleteMessages).toBe(false);
   });
 
   test('Default setting to stay in the channel is false', () => {
-    expect(testedConfig.stayInChannel).toEqual(false);
+    expect(testedConfig.stayInChannel).toBe(false);
   });
 
   test('Default setting to deafen the bot is false', () => {
-    expect(testedConfig.deafen).toEqual(false);
+    expect(testedConfig.deafen).toBe(false);
   });
 
-  test('Default game is set to sounds', () => {
-    expect(testedConfig.game).toEqual('sounds');
+  test('Default game is not set', () => {
+    expect(testedConfig.game).toEqual('SoundBoard');
   });
 });
 
 describe('Setting config from Environment Variables', () => {
   const OLD_ENVIRONMENT_VARIABLES = process.env;
-
-  beforeEach(() => {
-    jest.resetModules();
-    process.env = { ...OLD_ENVIRONMENT_VARIABLES };
-  });
 
   afterEach(() => {
     process.env = OLD_ENVIRONMENT_VARIABLES;

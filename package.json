@@ -1,6 +1,6 @@
 {
   "name": "discord-soundbot",
-  "version": "1.7.0-dev",
+  "version": "2.1.0-dev",
   "description": "A Soundboard for Discord",
   "main": "dist/src/index.js",
   "bin": {
@@ -20,19 +20,19 @@
     "nodejs",
     "typescript"
   ],
-  "author": "Marko Kajzer",
+  "author": "Marko Kajzer <markokajzer91@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@sentry/node": "^5.11.1",
-    "awilix": "^4.2.2",
-    "discord.js": "discordjs/discord.js#master",
+    "@discordjs/opus": "0.1.0",
+    "discord.js": "^12.2.0",
     "i18n": "^0.8.4",
-    "lodash": "4.17.15",
+    "lodash": "^4.17.15",
     "lowdb": "^1.0.0",
     "opusscript": "^0.0.7",
     "prism-media": "amishshah/prism-media#master",
     "replace-in-file": "4.2.0",
-    "ytdl-core": "ˆ1.0.3"
+    "ytdl-core": "^2.1.1"
   },
   "optionalDependencies": {
     "bufferutil": "4.0.1",
@@ -44,7 +44,7 @@
     "@types/i18n": "0.8.6",
     "@types/jest": "24.0.21",
     "@types/lowdb": "1.0.8",
-    "@types/node": "12.12.7",
+    "@types/node": "12.12.30",
     "@types/ws": "^6.0.4",
     "@typescript-eslint/eslint-plugin": "2.6.1",
     "@typescript-eslint/parser": "2.6.1",
@@ -55,12 +55,12 @@
     "eslint-plugin-jest": "23.0.2",
     "eslint-plugin-prettier": "3.1.1",
     "jest": "24.9.0",
-    "prettier": "^1.19.1",
+    "prettier": "2.0.4",
     "ts-jest": "24.1.0",
     "typescript": "3.7.2"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=12.0.0"
   },
   "scripts": {
     "clean": "rm -rf dist",

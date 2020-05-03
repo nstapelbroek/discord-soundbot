@@ -66,7 +66,7 @@ export default class YoutubeDownloader extends BaseDownloader {
   }
 
   private cleanUp(name: string) {
-    fs.unlinkSync(this.tempFileName);
+    // fs.unlinkSync(this.tempFileName);
     return Promise.resolve(localize.t('commands.add.success', { name }));
   }
 

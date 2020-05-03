@@ -1,11 +1,8 @@
 import { SOUNDS_DIR, soundsPath } from '@util/FileLocations';
 import fs from 'fs';
-
-import Config from '@config/Config';
-import container from './Container';
+import { config } from './Container';
 
 const getSoundsFromSoundFolder = () => {
-  const config = container.cradle.config as Config;
   const files = fs.readdirSync(SOUNDS_DIR);
 
   return files.filter(sound =>
@@ -15,6 +12,7 @@ const getSoundsFromSoundFolder = () => {
 
 const getSoundWithExtension = (sound: string) => {
   const [name, extension] = sound.split('.');
+
   return { name, extension };
 };
 

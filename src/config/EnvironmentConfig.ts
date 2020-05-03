@@ -1,6 +1,6 @@
 import * as os from 'os';
 
-export default class SystemConfig {
+export default class EnvironmentConfig {
   public sentryDsn?: string;
   public environment?: string;
   public hostName!: string;

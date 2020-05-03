@@ -29,7 +29,7 @@ To learn how to edit the config while the bot is running, see [below](#changing-
 
 ### Building
 
-The bot can be installed manually, via Docker, or as an npm package. When not using Docker the bot needs at least **Node.js v8.0.0** or newer and **FFmpeg** for its voice functionality.
+The bot can be installed manually, via Docker, or as an npm package. When not using Docker the bot needs at least **Node.js v12.0.0** or newer and **FFmpeg** for its voice functionality.
 
 #### Building manually
 
@@ -62,7 +62,7 @@ Start the bot.
 const SoundBot = require('discord-soundbot');
 
 const myBot = new SoundBot({
-  clientID: 'YOUR_CLIENT_ID',
+  clientId: 'YOUR_CLIENT_ID',
   token: 'YOUR_BOT_USER_TOKEN'
 });
 myBot.start();
