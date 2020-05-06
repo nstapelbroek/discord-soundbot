@@ -52,12 +52,12 @@ export default class SoundQueue {
     if (this.isEmpty()) return;
 
     let deleteableMessages = this.queue
-        .map(item => item.message)
-        .filter((message): message is Message => !!message);
+      .map(item => item.message)
+      .filter((message): message is Message => !!message);
 
     if (this.currentSound!.message) {
       deleteableMessages = deleteableMessages.filter(
-          message => message.id !== this.currentSound!.message!.id
+        message => message.id !== this.currentSound!.message!.id
       );
     }
 
@@ -70,11 +70,11 @@ export default class SoundQueue {
     const sound = getPathForSound(this.currentSound.name);
 
     this.currentSound.channel
-        .join()
-        .then(connection => this.deafen(connection))
-        .then(connection => this.playSound(connection, sound))
-        .then(connection => this.onFinishedPlayingSound(connection))
-        .catch(error => console.error('Error occured!', '\n', error));
+      .join()
+      .then(connection => this.deafen(connection))
+      .then(connection => this.playSound(connection, sound))
+      .then(connection => this.onFinishedPlayingSound(connection))
+      .catch(error => console.error('Error occured!', '\n', error));
   }
 
   private deafen(connection: VoiceConnection) {
@@ -89,9 +89,9 @@ export default class SoundQueue {
   private playSound(connection: VoiceConnection, name: string): Promise<VoiceConnection> {
     return new Promise(resolve => {
       this.dispatcher = connection
-          .play(name, { volume: this.config.volume })
-          .on('finish', () => resolve(connection))
-          .on('close', () => resolve(connection));
+        .play(name, { volume: this.config.volume })
+        .on('finish', () => resolve(connection))
+        .on('close', () => resolve(connection));
     });
   }
 

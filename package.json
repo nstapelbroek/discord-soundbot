@@ -23,14 +23,13 @@
   "author": "Marko Kajzer <markokajzer91@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@sentry/node": "^5.11.1",
     "@discordjs/opus": "0.1.0",
-    "discord.js": "^12.2.0",
-    "i18n": "^0.8.4",
-    "lodash": "^4.17.15",
-    "lowdb": "^1.0.0",
-    "opusscript": "^0.0.7",
-    "prism-media": "amishshah/prism-media#master",
+    "@sentry/node": "^5.15.5",
+    "discord.js": "12.2.0",
+    "fluent-ffmpeg": "2.1.2",
+    "i18n": "0.8.4",
+    "lodash": "4.17.15",
+    "lowdb": "1.0.0",
     "replace-in-file": "4.2.0",
     "ytdl-core": "^2.1.1"
   },
@@ -40,12 +39,13 @@
     "libsodium-wrappers": "0.7.6"
   },
   "devDependencies": {
+    "@types/fluent-ffmpeg": "2.1.11",
     "@types/glob": "7.1.1",
     "@types/i18n": "0.8.6",
     "@types/jest": "24.0.21",
     "@types/lowdb": "1.0.8",
     "@types/node": "12.12.30",
-    "@types/ws": "^6.0.4",
+    "@types/ws": "6.0.4",
     "@typescript-eslint/eslint-plugin": "2.6.1",
     "@typescript-eslint/parser": "2.6.1",
     "eslint": "6.6.0",
@@ -57,6 +57,7 @@
     "jest": "24.9.0",
     "prettier": "2.0.4",
     "ts-jest": "24.1.0",
+    "ts-node": "8.6.2",
     "typescript": "3.7.2"
   },
   "engines": {
@@ -68,10 +69,10 @@
     "format:check": "prettier --config .prettierrc.yml --ignore-path .prettierignore --list-different '**/**.ts'",
     "format": "prettier --config .prettierrc.yml --ignore-path .prettierignore --write '**/**.ts'",
     "lint": "eslint --rulesdir ./vendor/rules/ -c .eslintrc.yml --ext ts .",
-    "postbuild": "node dist/lib/postbuild.js",
+    "postbuild": "ts-node lib/postbuild.ts",
     "serve": "node dist/bin/soundbot.js",
     "start": "npm run build && npm run serve",
-    "translate": "node dist/lib/checkTranslations.js",
+    "translate": "ts-node lib/checkTranslations.ts",
     "rebuild": "npm run clean && npm run build",
     "release": "npm run rebuild && npm run lint && npm run format"
   }

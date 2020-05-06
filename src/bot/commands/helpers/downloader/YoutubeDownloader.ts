@@ -2,66 +2,72 @@ import { soundsPath, storagePath } from '@util/FileLocations';
 import fs from 'fs';
 
 import { Message } from 'discord.js';
-import { FFmpeg } from 'prism-media';
-import { spawn } from 'child_process';
+import ffmpeg from 'fluent-ffmpeg';
 import ytdl from 'ytdl-core';
 
 import localize from '@util/i18n/localize';
 import BaseDownloader from './BaseDownloader';
 import YoutubeValidator from './validator/YoutubeValidator';
 
+interface ConvertOptions {
+  soundName: string;
+  startTime: string | undefined;
+  endTime: string | undefined;
+}
+
+interface DownloadOptions extends ConvertOptions {
+  url: string;
+}
+
 export default class YoutubeDownloader extends BaseDownloader {
   protected readonly validator: YoutubeValidator;
-  private readonly tempFileName = storagePath('tmp.mp4');
 
   constructor(youtubeValidator: YoutubeValidator) {
     super();
+
     this.validator = youtubeValidator;
   }
 
-  public handle(message: Message) {
-    const params = message.content.split(' ');
+  public handle(message: Message, params: string[]) {
     if (params.length < 2 || params.length > 4) return;
 
-    const [name, link, start, end] = params;
+    const [soundName, url, startTime, endTime] = params;
 
     this.validator
-      .validate(name, link)
-      .then(() => this.addSound(link, name, start, end))
+      .validate(soundName, url)
+      .then(() => this.addSound({ url, soundName, startTime, endTime }))
       .then(result => message.channel.send(result))
       .catch(result => message.channel.send(result));
   }
 
-  private addSound(
-    url: string,
-    filename: string,
-    startTime: string | undefined,
-    endTime: string | undefined
-  ) {
+  private addSound({ url, soundName, startTime, endTime }: DownloadOptions) {
     return this.download(url)
-      .then(() => this.convert(filename, startTime, endTime))
-      .then(() => this.cleanUp(filename))
+      .then(() => this.convert({ soundName, startTime, endTime }))
+      .then(() => this.cleanUp(soundName))
       .catch(this.handleError);
   }
 
   private download(url: string) {
     return new Promise((resolve, reject) => {
       ytdl(url, { filter: format => format.container === 'mp4' })
-        .pipe(fs.createWriteStream(this.tempFileName))
+        .pipe(fs.createWriteStream(storagePath('tmp.mp4')))
         .on('finish', resolve)
         .on('error', reject);
     });
   }
 
-  private convert(name: string, startTime: string | undefined, endTime: string | undefined) {
-    let args = ['-i', this.tempFileName, '-ar', '48000', '-ac', '2'];
-    if (startTime) args.push('-ss', startTime);
-    if (endTime) args.push('-to', endTime);
-    args.push(soundsPath(`${name}.mp3`));
+  private convert({ soundName, startTime, endTime }: ConvertOptions) {
+    let ffmpegCommand = ffmpeg(storagePath('tmp.mp4'));
+
+    if (startTime) ffmpegCommand = ffmpegCommand.setStartTime(startTime);
+    if (endTime) ffmpegCommand = ffmpegCommand.inputOption('-to', endTime);
 
     return new Promise((resolve, reject) => {
-      const transcoder = spawn(FFmpeg.getInfo().command, args);
-      transcoder.on('close', resolve).on('error', reject);
+      ffmpegCommand
+        .output(soundsPath(`${soundName}.mp3`))
+        .on('end', resolve)
+        .on('error', reject)
+        .run();
     });
   }
 
@@ -72,6 +78,7 @@ export default class YoutubeDownloader extends BaseDownloader {
 
   private handleError(error: Error) {
     console.error(error);
+
     return Promise.reject(localize.t('commands.add.error'));
   }
 }
