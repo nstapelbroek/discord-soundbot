@@ -59,7 +59,7 @@ export default class YoutubeDownloader extends BaseDownloader {
     let ffmpegCommand = ffmpeg('tmp.mp4');
 
     if (startTime) ffmpegCommand = ffmpegCommand.setStartTime(startTime);
-    if (endTime) ffmpegCommand = ffmpegCommand.setDuration(endTime);
+    if (endTime) ffmpegCommand = ffmpegCommand.inputOption('-to', endTime);
 
     return new Promise((resolve, reject) => {
       ffmpegCommand
